@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y*-100) + 10;
+        // spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y*-100) + 10;
     }
 
     void FixedUpdate()

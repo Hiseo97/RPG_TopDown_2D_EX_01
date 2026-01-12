@@ -8,15 +8,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Obstacle
+  - Ground
+  - Projectile_Player
+  - Projectile_Enemy
+  - Trigger
   - 
   - 
   - 
@@ -38,14 +38,26 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 1792106165
+    locked: 0
   - name: Ground
     uniqueID: 352632413
+    locked: 0
+  - name: GroundDeco
+    uniqueID: 783743261
     locked: 0
   - name: Actor
     uniqueID: 3664102037
     locked: 0
-  - name: Foreground
+  - name: ActorFront
     uniqueID: 1829881025
+    locked: 0
+  - name: FX
+    uniqueID: 4084466431
+    locked: 0
+  - name: UI
+    uniqueID: 2646333329
     locked: 0
   - name: Default
     uniqueID: 0
