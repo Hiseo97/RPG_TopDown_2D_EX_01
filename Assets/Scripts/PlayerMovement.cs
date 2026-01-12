@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         if (inputVec.x < 0)
         
             spriteRenderer.flipX = true;
-        else   
+        else if (inputVec.x > 0)
             spriteRenderer.flipX = false;
         
         animator.SetFloat("Xinput", inputVec.x);
