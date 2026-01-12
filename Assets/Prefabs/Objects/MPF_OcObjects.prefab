@@ -159,7 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6361271491630779025}
   m_Layer: 0
-  m_Name: MPF_Objects
+  m_Name: MPF_OcObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
