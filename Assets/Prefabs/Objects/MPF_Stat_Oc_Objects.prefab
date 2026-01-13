@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 392013188926856086}
   - component: {fileID: 4033660362341678414}
   - component: {fileID: 8191416013803104446}
-  - component: {fileID: 735751818302942948}
   m_Layer: 0
   m_Name: Objects_Base
   m_TagString: Untagged
@@ -76,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -630865259
-  m_SortingLayer: -2
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: -3146623167323606182, guid: b609ccbd088fcbf449bf12a23074fa3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -135,20 +134,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4.5118637, y: 1.9402268}
   m_EdgeRadius: 0
---- !u!114 &735751818302942948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2734103582329840990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd07debd429fa124c9e7aba882f0f2e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sr: {fileID: 0}
-  st_offset: 50
 --- !u!1 &2804392083218087510
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6361271491630779025}
   m_Layer: 0
-  m_Name: MPF_OcObjects
+  m_Name: MPF_Stat_Oc_Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -256,7 +241,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1829881025
-  m_SortingLayer: -1
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: -8153270486959499764, guid: 7a78bc723388bd144956eac21373065f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
