@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    public int damage = 1;
+    public int damage = 2;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        collision.gameObject.GetComponent<PlayerHealth>().ChangeHealth(-damage);
+        if (collision.gameObject.TryGetComponent(out PlayerHealth health))
+        {
+            health.ChangeHealth(-damage);
+        }
     }
+
 }

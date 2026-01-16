@@ -7,14 +7,14 @@ public class PlayerMovement : MonoBehaviour
 {
     public Vector2 inputVec;
     public float speed = 5f;
-    public Rigidbody2D rigid;
+    public Rigidbody2D rb;
     public Animator animator;
     public SpriteRenderer spriteRenderer;
 
 
     void Awake()
     {
-        rigid = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 nextVec = inputVec.normalized*speed*Time.fixedDeltaTime;
-        rigid.MovePosition(rigid.position + nextVec);
+        rb.MovePosition(rb.position + nextVec);
 
         if (inputVec.x < 0)
         
