@@ -35,6 +35,7 @@ public class EnemyVision2D : MonoBehaviour
     {
         if (!_hasCandidate)
         {
+            Debug.Log("인지불가");
             Detected = false;
             return;
         }
@@ -43,6 +44,7 @@ public class EnemyVision2D : MonoBehaviour
         _nextCheck = Time.time + checkInterval;
 
         Detected = CheckVision();
+        Debug.Log(Detected);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -66,7 +68,7 @@ public class EnemyVision2D : MonoBehaviour
 
     bool CheckVision()
     {
-        if (!target) return false;
+        if (!target) return false;  
 
         Vector2 origin = eyes ? (Vector2)eyes.position : (Vector2)transform.position;
         Vector2 toPlayer = (Vector2)target.position - origin;
@@ -76,7 +78,6 @@ public class EnemyVision2D : MonoBehaviour
 
         float dist = Mathf.Sqrt(distSqr);
 
-        // ✅ 여기서만 movement.Forward 읽어옴 (복사 변수 제거)
         Vector2 forward = movement ? movement.Forward : (Vector2)transform.right;
         if (Vector2.Angle(forward, toPlayer) > viewAngle * 0.5f) return false;
 
@@ -87,6 +88,7 @@ public class EnemyVision2D : MonoBehaviour
 
         if (!hit.collider) return false;
 
+        Debug.Log("감지 성공");
         return ((1 << hit.collider.gameObject.layer) & playerMask) != 0;
     }
 
