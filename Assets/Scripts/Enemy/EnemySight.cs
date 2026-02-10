@@ -1,7 +1,14 @@
+using Unity.VisualScripting.FullSerializer;
+using UnityEditor.Build.Content;
 using UnityEngine;
+using UnityEngine.LightTransport;
+using UnityEngine.Rendering.Universal.Internal;
 
-public class EnemyVision2D : MonoBehaviour
+public class EnemySight : MonoBehaviour
 {
+    private CircleCollider2D sightCheckArea;
+    [SerializeField] int firstSight;
+    public Vector2 forward;
     EnemyMovement movement;
 
     [Header("Precheck")]
@@ -27,15 +34,23 @@ public class EnemyVision2D : MonoBehaviour
 
     void Awake()
     {
+        sightCheckArea = GetComponent<CircleCollider2D>();
         movement = GetComponent<EnemyMovement>();
         if (!eyes) eyes = transform;
     }
+
+    void Start()
+    {
+        sightCheckArea.radius = viewDistance + 2;
+        forward = AngToDir (firstSight);
+        Debug.Log(forward);
+    }
+
 
     void Update()
     {
         if (!_hasCandidate)
         {
-            Debug.Log("인지불가");
             Detected = false;
             return;
         }
@@ -44,7 +59,7 @@ public class EnemyVision2D : MonoBehaviour
         _nextCheck = Time.time + checkInterval;
 
         Detected = CheckVision();
-        Debug.Log(Detected);
+        
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -53,6 +68,7 @@ public class EnemyVision2D : MonoBehaviour
         {
             target = other.transform;
             _hasCandidate = true;
+            Debug.Log("콜라이더 작용 중");
         }
     }
 
@@ -63,6 +79,7 @@ public class EnemyVision2D : MonoBehaviour
             _hasCandidate = false;
             target = null;
             Detected = false;
+            Debug.Log("콜라이더 작용 해제");
         }
     }
 
@@ -70,7 +87,7 @@ public class EnemyVision2D : MonoBehaviour
     {
         if (!target) return false;  
 
-        Vector2 origin = eyes ? (Vector2)eyes.position : (Vector2)transform.position;
+        Vector2 origin = transform.position;
         Vector2 toPlayer = (Vector2)target.position - origin;
 
         float distSqr = toPlayer.sqrMagnitude;
@@ -78,7 +95,6 @@ public class EnemyVision2D : MonoBehaviour
 
         float dist = Mathf.Sqrt(distSqr);
 
-        Vector2 forward = movement ? movement.Forward : (Vector2)transform.right;
         if (Vector2.Angle(forward, toPlayer) > viewAngle * 0.5f) return false;
 
         Vector2 dir = toPlayer / dist;
@@ -88,8 +104,14 @@ public class EnemyVision2D : MonoBehaviour
 
         if (!hit.collider) return false;
 
-        Debug.Log("감지 성공");
+        forward = toPlayer;
         return ((1 << hit.collider.gameObject.layer) & playerMask) != 0;
+    }
+
+    Vector2 AngToDir(float angleDeg)
+    {
+    float rad = -(angleDeg-90f) * Mathf.Deg2Rad;
+    return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
     }
 
 #if UNITY_EDITOR
@@ -97,10 +119,10 @@ public class EnemyVision2D : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
-        Vector3 origin = eyes ? eyes.position : transform.position;
+        Vector3 origin = transform.position;
 
-        Vector2 f2 = movement ? movement.Forward : (Vector2)transform.right;
-        Vector3 forward = f2.sqrMagnitude > 0.0001f ? (Vector3)f2.normalized : transform.right;
+        Vector2 f2 = forward;
+        Vector3 f3 = f2.sqrMagnitude > 0.0001f ? (Vector3)f2.normalized : transform.right;
 
         Gizmos.DrawWireSphere(origin, viewDistance);
 
@@ -108,8 +130,8 @@ public class EnemyVision2D : MonoBehaviour
         Quaternion leftRot = Quaternion.Euler(0, 0, -half);
         Quaternion rightRot = Quaternion.Euler(0, 0, half);
 
-        Gizmos.DrawLine(origin, origin + (leftRot * forward) * viewDistance);
-        Gizmos.DrawLine(origin, origin + (rightRot * forward) * viewDistance);
+        Gizmos.DrawLine(origin, origin + (leftRot * f3) * viewDistance);
+        Gizmos.DrawLine(origin, origin + (rightRot * f3) * viewDistance);
     }
 #endif
 }

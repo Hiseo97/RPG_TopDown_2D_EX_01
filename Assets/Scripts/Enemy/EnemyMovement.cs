@@ -1,6 +1,7 @@
 using System;
 using TreeEditor;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.Tilemaps;
 using UnityEditor.Timeline;
 using UnityEngine;
@@ -11,28 +12,30 @@ public class EnemyMovement : MonoBehaviour
     public EnemyState enemyState, newState;
     public float attackRange = 2;
     public float attackCooldown = 2;
-
     private float attackCooldownTimer;
     private Rigidbody2D rb;
     private int facingDirection = 1;
-    EnemyVision2D vision;
+    EnemySight Sight;
     [SerializeField] Transform player;
-    [SerializeField] float speed = 3f;
-    public Vector2 Forward { get; private set; } // 마지막 유효 방향(정규화)
+    [SerializeField] float speed = 2f;
     private Animator anim;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        vision = GetComponent<EnemyVision2D>();
+        Sight = GetComponentInChildren<EnemySight>();
         anim = GetComponent<Animator>();
-
-        Forward = transform.right; // 초기 정면
         ChangeState(EnemyState.Idle);
 
     }
 
-
+    void Update()
+    {
+        if (Sight.forward.x >= 0 && facingDirection == -1 || Sight.forward.x < 0 && facingDirection == 1)
+            {
+                Flip();
+            }
+    }
     void FixedUpdate()
     {
         if (attackCooldownTimer > 0)
@@ -44,23 +47,18 @@ public class EnemyMovement : MonoBehaviour
 
     void CheckForPlayer()
     {
-        if (vision.Detected && player)
+        if (Sight.Detected && player)
         {
-            
-            if (Vector2.Distance(transform.position, player.transform.position) <= attackRange && attackCooldownTimer <= 0)
+            float EnemyPlayerDistSqr = (transform.position - player.transform.position).sqrMagnitude;
+            if (attackCooldownTimer <= 0 && EnemyPlayerDistSqr <= attackRange*attackRange)
             {
                 attackCooldownTimer = attackCooldown;
                 ChangeState(EnemyState.Attacking);
             }
 
-            else if (Vector2.Distance(transform.position, player.transform.position) > attackRange)
+            else if (EnemyPlayerDistSqr > attackRange*attackRange)
             {
                 ChangeState(EnemyState.Chasing);
-                if (player.position.x > transform.position.x && facingDirection == -1 ||
-                    player.position.x < transform.position.x && facingDirection == 1)
-                {
-                    Flip();
-                }
                 Chase ();
                 Debug.Log("Chase");
             }
@@ -76,10 +74,8 @@ public class EnemyMovement : MonoBehaviour
 
     void Chase()
     {
-        Vector2 dir = ((Vector2)player.position - rb.position).normalized;
+        Vector2 dir = Sight.forward.normalized;
         Vector2 vel = dir * speed;
-        if (dir.sqrMagnitude > 0.0001f)
-            Forward = dir;
         rb.linearVelocity = vel;
     }
 
